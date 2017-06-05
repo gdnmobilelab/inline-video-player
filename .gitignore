@@ -1,0 +1,13 @@
+.DS_Store
+node_modules
+.gobble
+.gobble-build
+.build
+.deploy
+npm-debug.log
+scripts
+harness
+.eslintrc
+giafile.js
+gobblefile.js
+

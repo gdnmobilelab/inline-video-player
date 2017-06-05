@@ -1,0 +1,539 @@
+<div class="interactive-atom" ref:atomContainer>
+	<div ref:videocontainer class="gdnml-video-container">
+		<div class="mobile-video-header-wrapper hidden speedy">
+			<svg ref:closebutton height="22" viewBox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg">
+				<path fill="#fff" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+			</svg>
+			<a ref:giveFeedbackLink on:click='togglePause(true)' class="give-feedback" href="https://docs.google.com/forms/d/e/1FAIpQLSe0AHrsrLPaWOXDB87T25oOnTHs2ckxEkwIhaWjo5Pjc4hYWQ/viewform" target="_blank">Give Feedback</a>
+		</div>
+		<div class="embed-container">
+			<div ref:video></div>
+		</div>
+		<div ref:embedControls class="embed-controls speedy">
+			<svg on:click='togglePause(false)' ref:playControl class="video-control {{playControlClass}}" fill="#fff" height="32" viewBox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
+			    <path d="M8 5v14l11-7z"/>
+			    <path d="M0 0h24v24H0z" fill="none"/>
+			</svg>
+			<svg on:click='togglePause(true)' ref:pauseControl class="video-control {{pauseControlClass}}" fill="#fff" height="32" viewBox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
+			    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+			    <path d="M0 0h24v24H0z" fill="none"/>
+			</svg>
+			<svg on:click='toggleMute(true)' fill="#fff" ref:volumeOnControl class="volume-control {{volumeOnControlClass}}" height="32" viewBox="0 0 24 24" width="32"  xmlns="http://www.w3.org/2000/svg">
+			    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+			    <path d="M0 0h24v24H0z" fill="none"/>
+			</svg>
+			<svg on:click='toggleMute(false)' fill="#fff" ref:volumeOffControl class="volume-control {{volumeOffControlClass}}" height="32" viewBox="0 0 24 24" width="32"  xmlns="http://www.w3.org/2000/svg">
+			    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+			    <path d="M0 0h24v24H0z" fill="none"/>
+			</svg>
+			<div class="_5pe- {{liveIconClass}}">
+				<span class="_5pf0">Live</span>
+				<svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 8 8" width="16">
+   					<circle cx="4" cy="5.5" r="2" fill="white">
+						  <animate id="animation1"
+						             attributeName="opacity"
+						             from="0" to="1" dur="0.5s"
+						             begin="0s;animation2.end" />
+						    <animate id="animation2"
+						             attributeName="opacity"
+						             from="1" to="0" dur="0.5s" 
+						             begin="animation1.end" />
+   					</circle>
+				</svg>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.give-feedback {
+		float: right;
+		color: #fff;
+		margin-top: 4px;
+	}
+
+	._5pe- {
+		position: absolute;
+		right: 6px;
+		bottom: 8px;
+		background-color: #fa3e3e;
+    	border-radius: 4px;
+	    display: inline-block;
+	    font-weight: 500;
+	    padding: 1px 6px;
+	    opacity: 0.8;
+	}
+
+	.embed-container { 
+		position: relative; 
+		padding-bottom: 56.25%; 
+		height: 0; 
+		overflow: hidden; 
+		max-width: 100%; 
+	} 
+
+	.embed-container iframe, 
+	.embed-container object, 
+	.embed-container embed { 
+		position: absolute; 
+		top: 0; 
+		left: 0; 
+		width: 100%; 
+		height: 100%; 
+	}
+
+	.embed-controls {
+		background-color: #000;
+		width: 100%;
+		height: 38px;
+		min-height: 38px; /* I'm here for rendering purposes */
+		position: relative;
+	}
+
+	.embed-controls svg.video-control {
+		position: absolute;
+		left: 0;
+		bottom: 4px;
+	}
+
+	.embed-controls svg.volume-control {
+		position: absolute;
+		left: 38px;
+		bottom: 4px;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	.gdnml-video-container {
+		font-family: "Guardian Egyptian Web","Guardian Text Egyptian Web",Georgia,serif;
+		color: #fff;
+		/*min-height: 1px;
+		max-height: 480px;*/
+	}
+
+	.mobile-video-header-wrapper {
+		background-color: #222;
+		overflow: auto;
+		padding: 5px;
+	}
+
+	.speedy {
+	   -webkit-transform: translate3d(0, 0, 0);
+	   -moz-transform: translate3d(0, 0, 0);
+	   -ms-transform: translate3d(0, 0, 0);
+	   transform: translate3d(0, 0, 0);
+	}
+</style>
+
+<script>
+	function log() {
+		if (console && console.log) {
+			console.log(...arguments);
+		}
+	}
+
+	export default {
+		data() {
+			return {
+				videoWindowOffset: 0,
+				playControlClass: '',
+				pauseControlClass: 'hidden',
+				volumeOnControlClass: '',
+				volumeOffControlClass: 'hidden',
+				liveIconClass: 'hidden',
+				muted: false,
+				paused: true
+			}
+		},
+
+		methods: {
+			toggleMute: function(mute) {
+				var ga = this.get('ga');
+				var hasPlayer = this.get('player');
+
+				this.set({
+					muted: mute
+				})
+
+				if (hasPlayer) {
+					if (mute) {
+						hasPlayer.mute();
+						ga('gdnMobileLabTracker.send', {
+							hitType: 'event',
+							eventCategory: 'Live Video',
+							eventAction: 'Tap-Action',
+							eventLabel: 'Mute',
+							dimension3: 'Inauguration - Live',
+							dimension4: 'Inauguration - Live - Segment #1',
+							dimension5: 'Live Video Multitasking',
+							dimension7: 'Web'
+						});
+					} else {
+						hasPlayer.unMute();
+						ga('gdnMobileLabTracker.send', {
+							hitType: 'event',
+							eventCategory: 'Live Video',
+							eventAction: 'Tap-Action',
+							eventLabel: 'UnMute',
+							dimension3: 'Inauguration - Live',
+							dimension4: 'Inauguration - Live - Segment #1',
+							dimension5: 'Live Video Multitasking',
+							dimension7: 'Web'
+						});
+					}
+				}
+			},
+
+			togglePause: function(pause) {
+				var hasPlayer = this.get('player');
+
+				if (hasPlayer) {
+					if (pause) {
+						hasPlayer.pauseVideo();
+					} else {
+						hasPlayer.playVideo();
+					}
+				}
+			},
+
+			addVideoEventHandlers: function(YT) {
+				var theWindow = window.parent,
+					iframeEl = window.frameElement || this.refs.videocontainer,
+					closeButton = this.refs.closebutton,
+					playControl = this.refs.playControl,
+					pauseControl = this.refs.pauseControl,
+					embedControls = this.refs.embedControls;
+				
+				iframeEl.width = '100%';
+
+				if (theWindow.document 
+					&& theWindow.document.documentElement 
+					&& theWindow.document.documentElement.clientWidth) {
+					theWindow.GDM_MOBILE_LAB_CLIENT_WIDTH = theWindow.document.documentElement.clientWidth;
+				} else {
+					theWindow.GDM_MOBILE_LAB_CLIENT_WIDTH = 180;
+				}
+
+				if (theWindow.GDM_MOBILE_LAB_CLIENT_WIDTH < 150) {
+					theWindow.GDM_MOBILE_LAB_CLIENT_WIDTH = 180;
+				}
+
+				theWindow.GDM_MOBILE_LAB_VIDEO_IFRAME_HEIGHT = 178;
+				let mainContentDiv = theWindow.document.querySelector('.content__main');
+				let mainContentDivHeight = mainContentDiv ? mainContentDiv.offsetTop : 220;
+
+				theWindow.GDN_MOBILE_LAB_VIDEO_WINDOW_OFFSET = mainContentDivHeight + 24 + iframeEl.offsetHeight;
+				theWindow.GDN_MOBILE_LAB_VIDEO_CLICK_SWIPE_CLOSED = false;
+				theWindow.GDN_MOBILE_LAB_VIDEO_SEND_PAUSE_TO_GA = true;
+
+				log('Creating YT player');
+				var videoStartTime = performance ? performance.now() : Date.now();
+
+				var player = new YT.Player(this.refs.video, {
+					videoId: '1UXYMPTdC40',
+					playerVars: { 
+						'controls': 0,
+						'playsinline': 1
+					},
+					events: {
+						onReady: () => {
+							theWindow.GDM_MOBILE_LAB_VIDEO_IFRAME_HEIGHT  = (parseInt(iframeEl.height, 10) + 16) + 'px';
+							iframeEl.style.height = theWindow.GDM_MOBILE_LAB_VIDEO_IFRAME_HEIGHT;
+
+							ga('gdnMobileLabTracker.send', {
+								hitType: 'event',
+								eventCategory: 'Live Video',
+								eventAction: 'Show',
+								eventLabel: 'Inauguration - Live',
+								dimension3: 'Inauguration - Live',
+								dimension4: 'Inauguration - Live - Segment #1',
+								dimension5: 'Live Video Multitasking',
+								dimension7: 'Web'
+							});
+						},
+						onError: (err) => {
+
+						},
+						onStateChange: (event) => {
+							var playerStatus = event.data;
+							if (playerStatus == -1) {
+								log('Video scrolling enabled');
+								theWindow.GDN_MOBILE_LAB_HAS_ENGAGED_WITH_VIDEO = true;
+						    } else if (playerStatus == 0) {
+						    	this.set({
+						    		paused: true
+						    	})
+						    } else if (playerStatus == 1) {
+						    	this.set({
+						    		paused: false,
+						    		liveIconClass: ''
+						    	});
+
+								ga('gdnMobileLabTracker.send', {
+									hitType: 'event',
+									eventCategory: 'Live Video',
+									eventAction: 'Tap-Action',
+									eventLabel: 'Play',
+									dimension3: 'Inauguration - Live',
+									dimension4: 'Inauguration - Live - Segment #1',
+									dimension5: 'Live Video Multitasking',
+									dimension7: 'Web'
+								});
+
+								videoStartTime = performance ? performance.now() : Date.now();
+						    } else if (playerStatus == 2) {
+						    	this.set({
+						    		paused: true,
+									liveIconClass: 'hidden'
+						    	})
+
+						    	if (theWindow.GDN_MOBILE_LAB_VIDEO_SEND_PAUSE_TO_GA) {
+							      	ga('gdnMobileLabTracker.send', {
+										hitType: 'event',
+										eventCategory: 'Live Video',
+										eventAction: 'Tap-Action',
+										eventLabel: 'Pause',
+										dimension3: 'Inauguration - Live',
+										dimension4: 'Inauguration - Live - Segment #1',
+										dimension5: 'Live Video Multitasking',
+										dimension7: 'Web'
+									});
+							    } else {
+							    	theWindow.GDN_MOBILE_LAB_VIDEO_SEND_PAUSE_TO_GA = true;
+							    }
+
+								ga('gdnMobileLabTracker.send', {
+									hitType: 'event',
+									eventCategory: 'Live Video',
+									eventAction: 'View Duration',
+									eventLabel: 'Inauguration - Live',
+									dimension3: 'Inauguration - Live',
+									dimension4: 'Inauguration - Live - Segment #1',
+									dimension5: 'Live Video Multitasking',
+									dimension7: 'Web',
+									dimension8:  Math.round(((performance ? performance.now() : Date.now()) - videoStartTime) / 1000)
+								});
+						    } else if (playerStatus == 3) {
+						      	// buffering
+						    } else if (playerStatus == 5) {
+						      	// video cued
+						    }
+						}
+		          	}
+				});
+
+				document.body.style.overflow = 'hidden';
+
+				theWindow.GDN_MOBILE_LAB_VIDEO_PLAYER = player;
+
+				this.set({
+					'player': player
+				});
+
+				function ga(client, opts) {
+					var gaArgs = [];
+					var hasActivated = false;
+					var attempts = 12;
+					var maybeGA = function(client, opts) {
+						gaArgs.push({client, opts});
+					}
+					
+					function checkGA() {
+						if (hasActivated || attempts <= 0) {
+							return;
+						}
+
+						console.log('checking if GA exists');
+						if (window.parent.ga) {
+							try {
+								var clientId = window.parent.ga.getAll()[0].get('clientId');
+							} catch (e) {
+								clientId = null;
+							}
+
+							window.parent.ga('create', 'UA-77348538-3', 'auto', 'gdnMobileLabTracker');
+							window.parent.ga('gdnMobileLabTracker.set', 'checkProtocolTask', null);
+
+							maybeGA = function(client, opts) {
+								if (clientId) {
+									opts['dimension6'] = clientId;
+								}
+
+  								window.parent.ga(client, opts);
+  							}
+
+							hasActivated = true;
+							for (var i = 0; i < gaArgs.length; i++) {
+								maybeGA(gaArgs[i].client, gaArgs[i].opts);
+							}
+						} else {
+							attempts -= 1;
+							setTimeout(checkGA, 1000);
+						}
+					}
+
+					checkGA();
+
+					maybeGA(client, opts);
+				}
+
+				this.set({
+					'ga': ga
+				});
+
+				function toggleSwipeAndTapActions (el, cb, on) {
+					var mc = new Hammer.Manager(el);
+					var swipe = new Hammer.Swipe();
+
+					mc.add(swipe);
+
+					if (on) {
+						log('Adding swipe action');
+						mc.on('swipe', function() {
+							log('swiping!');
+							cb();
+
+							ga('gdnMobileLabTracker.send', {
+								hitType: 'event',
+								eventCategory: 'Live Video',
+								eventAction: 'Tap-Action',
+								eventLabel: 'Swipe Close',
+								dimension3: 'Inauguration - Live',
+								dimension4: 'Inauguration - Live - Segment #1',
+								dimension5: 'Live Video Multitasking',
+								dimension7: 'Web'
+							});
+						})
+					} else {
+						log('Removing swipe action');
+						mc.remove('swipe');
+					}
+				}
+
+	    		function closeMobile() {
+					theWindow.GDN_MOBILE_LAB_VIDEO_CLICK_SWIPE_CLOSED = true;
+					theWindow.GDN_MOBILE_LAB_VIDEO_SEND_PAUSE_TO_GA = false;
+					player.stopVideo();
+					log('Pausing video');
+					setIframeStatic();
+	    		}
+
+	    		closeButton.addEventListener('click', () => {
+	    			closeMobile();
+	    			ga('gdnMobileLabTracker.send', {
+						hitType: 'event',
+						eventCategory: 'Live Video',
+						eventAction: 'Tap-Action',
+						eventLabel: 'Click Close',
+						dimension3: 'Inauguration - Live',
+						dimension4: 'Inauguration - Live - Segment #1',
+						dimension5: 'Live Video Multitasking',
+						dimension7: 'Web'
+					});
+	    		});
+
+	    		function setIframeStatic() {
+					//Clear styles just applied
+					iframeEl.removeAttribute('style');
+					iframeEl.classList.remove('gdnml-video-container--scrolling');
+
+					iframeEl.contentWindow.document.body.style.margin = '8px';
+
+					if (theWindow.GDM_MOBILE_LAB_VIDEO_IFRAME_HEIGHT < 198) {
+						iframeEl.style.height = 198;
+					} else {
+						iframeEl.style.height = theWindow.GDM_MOBILE_LAB_VIDEO_IFRAME_HEIGHT;
+					}
+
+				  	// this method gets called when scrolling and therefore given a new context,
+				  	// so dig down through the iframe to reference the elements instead of using
+				  	// the variables provided
+				  	
+					iframeEl.contentWindow.document.querySelector('.mobile-video-header-wrapper').classList.add('hidden');
+					toggleSwipeAndTapActions(iframeEl.contentWindow.document.querySelector('.gdnml-video-container'), closeMobile.bind(this), false);
+	    		}
+
+				function setIframeMobile() {
+					iframeEl.style.position = 'fixed';
+				  	iframeEl.style.zIndex = '3000';
+				  	iframeEl.style.bottom = '10px';
+				  	iframeEl.style.right = '10px';
+
+				  	var mobileWidth = (theWindow.GDM_MOBILE_LAB_CLIENT_WIDTH / 2 + 20);
+			
+				  	if (mobileWidth > 280) { // Establish a max width
+				  		mobileWidth = 280; 
+				  	}
+
+				  	if (mobileWidth < 150) {
+				  		mobileWidth = 150;
+				  	}
+
+				  	iframeEl.style.width = mobileWidth + 'px';
+				  	iframeEl.style.zIndex = '1011';
+				  	log(`Setting iframe height to: ${parseInt(iframeEl.height, 10) + 16}`);
+				  	iframeEl.style.height = '';
+
+				  	iframeEl.classList.add('gdnml-video-container--scrolling');
+				  	
+				  	iframeEl.contentWindow.document.body.style.margin = '0px';
+				 	iframeEl.contentWindow.document.querySelector('.mobile-video-header-wrapper').classList.remove('hidden');
+					toggleSwipeAndTapActions(iframeEl.contentWindow.document.querySelector('.gdnml-video-container'), closeMobile.bind(this), true);
+	    		}
+
+	    		var videos = theWindow.document.querySelectorAll('.element-video');
+				for (var i = 0; i < videos.length; i++) {
+					var mc = new Hammer.Manager(videos[i]);
+					var swipe = new Hammer.Tap();
+
+					mc.add(swipe);
+
+					mc.on('tap', () => {
+						player.pa
+					})
+
+					videos[i].addEventListener('click', () => {
+						var isPaused = this.get('paused')
+						if (isPaused) {
+							theWindow.GDN_MOBILE_LAB_VIDEO_PLAYER.playVideo();
+						} else {
+							theWindow.GDN_MOBILE_LAB_VIDEO_PLAYER.pauseVideo();
+						}
+					}, true);
+				}
+
+
+				theWindow.addEventListener('scroll', () => {
+					if (!theWindow.GDN_MOBILE_LAB_HAS_ENGAGED_WITH_VIDEO) { return; }
+
+					if ( theWindow.scrollY > theWindow.GDN_MOBILE_LAB_VIDEO_WINDOW_OFFSET ) {
+					  	if (iframeEl.classList.contains('gdnml-video-container--scrolling')) {
+					  		return;
+					  	}
+
+					  	if (theWindow.GDN_MOBILE_LAB_VIDEO_CLICK_SWIPE_CLOSED) {
+					  		return;
+					  	}
+						
+						setIframeMobile();
+				  } else {
+						theWindow.GDN_MOBILE_LAB_VIDEO_CLICK_SWIPE_CLOSED = false;
+
+					  	if (!iframeEl.classList.contains('gdnml-video-container--scrolling')) {
+					  		return;
+					  	}
+
+						setIframeStatic();
+				  }
+				}, { passive: true });
+			}
+		},
+
+		onrender() {
+			
+		}
+	};
+</script>
